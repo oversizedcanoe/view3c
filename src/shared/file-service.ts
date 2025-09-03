@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { UploadType } from './enums';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
-  fileName: string = '';
+  fileNames: string[] = [];
   lines: string[] = [];
   file: any;
 
@@ -14,11 +15,18 @@ export class FileService {
   constructor(){
   }
 
- async processFile(file: File): Promise<void> {
-    this.fileName = file.name;
+ async processFile(file: File, uploadType: UploadType): Promise<void> {
     const fileContents = await file.text();
     localStorage.setItem('fileContents', fileContents);
-    this.lines = fileContents.split('\n');
+    
+    if(uploadType == UploadType.Add){
+      this.fileNames = [file.name];
+      this.lines = fileContents.split('\n');
+    } else if (uploadType == UploadType.Append){
+      this.fileNames.push(file.name);
+      this.lines.push(...fileContents.split('\n'));
+    }
+
     this.onFileLoaded.next();
   }
 
@@ -29,5 +37,17 @@ export class FileService {
       this.lines = fileContents.split('\n');
       this.onFileLoaded.next();
     }
+  }
+
+  getFileCount(): number {
+    return this.fileNames.length;
+  }
+
+  getLineCount(): number{
+    return this.lines.length;
+  }
+
+  getFileNames(): string[]{
+    return this.fileNames;
   }
 }
