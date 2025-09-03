@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FileUpload } from "../file-upload/file-upload";
+import { FileService } from '../../shared/file-service';
+import { UploadType } from '../../shared/enums';
 
 @Component({
   selector: 'app-side-menu',
@@ -7,6 +9,28 @@ import { FileUpload } from "../file-upload/file-upload";
   templateUrl: './side-menu.html',
   styleUrl: './side-menu.css'
 })
-export class SideMenu {
+export class SideMenu implements OnInit {
+  public filesUploaded: number = 0;
+  public linesUploaded: number = 0;
+  public fileNamesUploaded: string = '';
 
+  public UploadType = UploadType;
+
+  constructor(private fileService: FileService) {
+    this.setFileMetaData();
+  }
+
+  ngOnInit(): void {
+    this.fileService.onFileLoaded.subscribe(() =>{
+      this.setFileMetaData();
+    })
+  }
+
+  setFileMetaData(){
+    // TODO These variables won't update 
+    this.filesUploaded = this.fileService.getFileCount();
+    this.linesUploaded = this.fileService.getLineCount();
+    this.fileNamesUploaded = this.fileService.getFileNames().join(', ');
+    console.log(this.fileNamesUploaded)
+  }
 }

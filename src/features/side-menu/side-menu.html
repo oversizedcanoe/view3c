@@ -2,6 +2,13 @@
 
     <h1>w3clarity</h1>
     
-    <app-file-upload />
-    <app-file-upload />
+    <app-file-upload [uploadType]="UploadType.Add" />
+    <app-file-upload [uploadType]="UploadType.Append"/>
+
+    <p>Metadata</p>
+    <ul>
+        <li>Total Files: {{filesUploaded}}</li>
+        <li>Total Lines: {{linesUploaded}}</li>
+        <li>File Names: {{fileNamesUploaded}}</li>
+    </ul>
 </div>
