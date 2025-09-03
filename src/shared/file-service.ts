@@ -23,6 +23,10 @@ export class FileService {
       this.fileNames = [file.name];
       this.lines = fileContents.split('\n');
     } else if (uploadType == UploadType.Append){
+      if(this.fileNames.indexOf(file.name) > -1){
+        alert('This file has already been processed. Skipping.');
+        return;
+      }
       this.fileNames.push(file.name);
       this.lines.push(...fileContents.split('\n'));
     }
