@@ -12,7 +12,7 @@ import { UploadType } from '../../shared/enums';
 export class SideMenu implements OnInit {
   public filesUploaded: number = 0;
   public linesUploaded: number = 0;
-  public fileNamesUploaded: string = '';
+  public fileNamesUploaded: string[] = [];
 
   public UploadType = UploadType;
 
@@ -27,10 +27,7 @@ export class SideMenu implements OnInit {
   }
 
   setFileMetaData(){
-    // TODO These variables won't update 
-    this.filesUploaded = this.fileService.getFileCount();
     this.linesUploaded = this.fileService.getLineCount();
-    this.fileNamesUploaded = this.fileService.getFileNames().join(', ');
-    console.log(this.fileNamesUploaded)
+    this.fileNamesUploaded = this.fileService.getFileNames();
   }
 }

@@ -16,6 +16,7 @@ export class FileService {
   }
 
  async processFile(file: File, uploadType: UploadType): Promise<void> {
+  console.log('processFile,' , UploadType[uploadType])
     const fileContents = await file.text();
     localStorage.setItem('fileContents', fileContents);
     

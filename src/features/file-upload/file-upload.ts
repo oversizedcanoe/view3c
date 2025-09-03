@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FileService } from '../../shared/file-service';
 import { UploadType } from '../../shared/enums';
 
@@ -8,14 +8,20 @@ import { UploadType } from '../../shared/enums';
   templateUrl: './file-upload.html',
   styleUrl: './file-upload.css'
 })
-export class FileUpload {
-  @Input() uploadType: UploadType = UploadType.Add;
-
+export class FileUpload implements OnInit {
+  @Input() uploadType!: UploadType;
+  @Input() labelText: string = 'Upload File';
   
   constructor(public fileService: FileService){
   }
 
+  ngOnInit(): void {
+  console.log('ngOnInit raw uploadType =', this.uploadType);
+  console.log('ngOnInit resolved =', UploadType[this.uploadType]);
+  }
+
   onFileUploaded($event: Event) {
+    console.log('onFileUploaded with label = ', this.labelText)
     const inputElement = $event.target as HTMLInputElement;
     if (inputElement.files && inputElement.files.length > 0) {
       const selectedFile = inputElement.files[0]; // Get the first selected file

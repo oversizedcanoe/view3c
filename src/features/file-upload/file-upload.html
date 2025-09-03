@@ -1,1 +1,4 @@
-<input type="file" (change)="onFileUploaded($event)"/>
+<div class="file-upload">
+    <label for="{{'fileUpload' + uploadType}}" class="file-upload-label">{{labelText}}</label>
+    <input id="{{'fileUpload' + uploadType}}" type="file" (change)="onFileUploaded($event)" />
+</div>

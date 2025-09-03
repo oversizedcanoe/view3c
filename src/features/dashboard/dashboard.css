@@ -5,3 +5,8 @@
 header {
     margin-bottom: 10vh;
 }
+
+.file-upload-wrapper {
+    max-width: 50%;
+    margin: 10vh auto 0 auto;
+}

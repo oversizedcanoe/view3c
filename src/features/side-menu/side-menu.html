@@ -1,14 +1,20 @@
 <div class="side-menu">
-
-    <h1>w3clarity</h1>
+    <div class="header-wrapper">
+        <h1>w3clarity</h1>
+    </div>
     
-    <app-file-upload [uploadType]="UploadType.Add" />
-    <app-file-upload [uploadType]="UploadType.Append"/>
-
-    <p>Metadata</p>
-    <ul>
-        <li>Total Files: {{filesUploaded}}</li>
-        <li>Total Lines: {{linesUploaded}}</li>
-        <li>File Names: {{fileNamesUploaded}}</li>
-    </ul>
+    <div class="file-upload-wrapper">
+        <app-file-upload [uploadType]="UploadType.Add" [labelText]="'Replace File'"/>
+        <app-file-upload [uploadType]="UploadType.Append" [labelText]="'Append File'"/>
+    </div>
+    
+    <div class="metadata-wrapper">
+            <p>Lines Processed: {{linesUploaded}}</p>
+            <p>Files Processed:</p>
+            <ul>
+                @for(fileName of fileNamesUploaded; track fileName){
+                    <li>{{fileName}}</li>
+                }
+            </ul>
+    </div>
 </div>
