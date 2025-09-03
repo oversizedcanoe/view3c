@@ -4,8 +4,12 @@
       <app-dashboard />
     }
     @else {
-      <app-side-menu />
-      <app-graph-container />
+      <div class="side-menu-wrapper">
+        <app-side-menu />
+      </div>
+      <div class="graph-container-wrapper">
+       <app-graph-container />
+      </div>
     }
     <!-- <router-outlet /> -->
   </div>

@@ -1,0 +1,12 @@
+.side-menu-wrapper{
+    height: 100vh;
+    width: 20%;
+    display: inline-block;
+
+}
+
+.graph-container-wrapper{
+    min-height: 100vh;
+    width: 80%;
+    float:right;
+}
