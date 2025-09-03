@@ -18,9 +18,8 @@ export class FileService {
  async processFile(file: File, uploadType: UploadType): Promise<void> {
   console.log('processFile,' , UploadType[uploadType])
     const fileContents = await file.text();
-    localStorage.setItem('fileContents', fileContents);
     
-    if(uploadType == UploadType.Add){
+    if (uploadType == UploadType.Add){
       this.fileNames = [file.name];
       this.lines = fileContents.split('\n');
     } else if (uploadType == UploadType.Append){
@@ -28,14 +27,19 @@ export class FileService {
       this.lines.push(...fileContents.split('\n'));
     }
 
+    localStorage.setItem('fileNames', this.fileNames.join(','));
+    localStorage.setItem('fileContents', this.lines.join('\n'));
+
     this.onFileLoaded.next();
   }
 
   checkIfLinesInStorage() {
     const fileContents = localStorage.getItem('fileContents');
+    const fileNames = localStorage.getItem('fileNames');
     
-    if (fileContents != null){
+    if (fileContents != null && fileNames != null){
       this.lines = fileContents.split('\n');
+      this.fileNames = fileNames.split(',');
       this.onFileLoaded.next();
     }
   }
