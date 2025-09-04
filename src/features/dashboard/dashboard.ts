@@ -11,4 +11,5 @@ import { UploadType } from '../../shared/enums';
 export class Dashboard {
 
   public UploadType = UploadType;
+
 }

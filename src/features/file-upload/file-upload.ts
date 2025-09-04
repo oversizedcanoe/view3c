@@ -16,12 +16,9 @@ export class FileUpload implements OnInit {
   }
 
   ngOnInit(): void {
-  console.log('ngOnInit raw uploadType =', this.uploadType);
-  console.log('ngOnInit resolved =', UploadType[this.uploadType]);
   }
 
   onFileUploaded($event: Event) {
-    console.log('onFileUploaded with label = ', this.labelText)
     const inputElement = $event.target as HTMLInputElement;
     if (inputElement.files && inputElement.files.length > 0) {
       const selectedFile = inputElement.files[0]; // Get the first selected file
