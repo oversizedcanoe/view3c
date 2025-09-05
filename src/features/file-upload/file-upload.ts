@@ -11,11 +11,17 @@ import { UploadType } from '../../shared/enums';
 export class FileUpload implements OnInit {
   @Input() uploadType!: UploadType;
   @Input() labelText: string = 'Upload File';
-  
-  constructor(public fileService: FileService){
+
+  constructor(public fileService: FileService) {
   }
 
   ngOnInit(): void {
+    window.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+    window.addEventListener("drop", (e) => {
+      e.preventDefault();
+    });
   }
 
   onFileUploaded($event: Event) {
