@@ -1,4 +1,4 @@
-<div class="file-upload">
+<div class="file-upload" id="{{'dropZone' + uploadType}}">
     <label for="{{'fileUpload' + uploadType}}" class="file-upload-label">{{labelText}}</label>
     <input id="{{'fileUpload' + uploadType}}" type="file" (change)="onFileUploaded($event)" />
 </div>

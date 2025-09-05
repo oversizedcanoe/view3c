@@ -9,11 +9,11 @@
     </div>
     
     <div class="metadata-wrapper">
-            <p>Lines Processed: {{linesUploaded}}</p>
+            <p>Lines Processed: <b>{{linesUploaded}}</b></p>
             <p>Files Processed:</p>
             <ul>
                 @for(fileName of fileNamesUploaded; track fileName){
-                    <li>{{fileName}}</li>
+                    <li><b>{{fileName}}</b></li>
                 }
             </ul>
     </div>
