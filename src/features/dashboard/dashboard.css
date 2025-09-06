@@ -2,12 +2,12 @@
     text-align: center;
 }
 
-header {
-    margin-bottom: 10vh;
+:host {
+    margin: 0 auto;
 }
 
-.dashboard-wrapper {
-    margin: 0 auto;
+header {
+    margin-bottom: 10vh;
 }
 
 .file-upload-wrapper {
