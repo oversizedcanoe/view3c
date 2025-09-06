@@ -20,3 +20,8 @@ export enum w3cLogFields {
   serverWin32Status = 'sc-win32-status',
   timeTaken = 'time-taken',
 }
+
+export enum GraphType {
+  TimeTaken = 1,
+  
+}
