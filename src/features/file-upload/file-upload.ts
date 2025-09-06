@@ -19,15 +19,15 @@ export class FileUpload implements AfterViewInit {
     window.addEventListener("dragover", (e) => {
       e.preventDefault();
     });
+
     window.addEventListener("drop", (e) => {
       e.preventDefault();
     });
 
     const dropZone = document.getElementById('dropZone' + this.uploadType);
 
-    console.log(dropZone);
     if (dropZone) {
-      dropZone.addEventListener("drop", this.dropHandler);
+      dropZone.addEventListener("drop", this.dropHandler.bind(this));
     }
   }
 
@@ -38,16 +38,18 @@ export class FileUpload implements AfterViewInit {
     if ($event.dataTransfer == null) {
       return;
     }
-    // Use DataTransferItemList interface to access the file(s)
-    [...$event.dataTransfer.items].forEach((item, i) => {
-      // If dropped items aren't files, reject them
-      if (item.kind === "file") {
+
+    for (let i = 0; i < $event.dataTransfer.items.length; i++) {
+     const item = $event.dataTransfer.items[i];
+     if (item.kind == 'file') {
         const file = item.getAsFile();
+        console.log('test')
         if (file) {
+          console.log(this);
           this.fileService.processFile(file, this.uploadType);
         }
-      }
-    });
+     } 
+    }
   }
 
   onFileUploaded($event: Event) {
