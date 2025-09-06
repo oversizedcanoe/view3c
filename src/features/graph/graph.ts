@@ -15,6 +15,7 @@ import { GraphService } from '../../shared/graph-service';
 export class Graph implements AfterViewInit {
   @Input() graphType!: GraphType;
   public uuid: string;
+  public additionalContext: string = '';
 
   constructor(private graphService: GraphService) {
     this.uuid = uuidv4();
@@ -23,7 +24,7 @@ export class Graph implements AfterViewInit {
   ngAfterViewInit(): void {
     // Create the echarts instance
     var myChart = echarts.init(document.getElementById(this.uuid));
-    this.graphService.createGraph(this.graphType, myChart);
+    this.additionalContext = this.graphService.createGraph(this.graphType, myChart);
     window.addEventListener('resize', function () {
       myChart.resize();
     });
