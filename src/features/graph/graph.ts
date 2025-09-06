@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { FileService } from '../../shared/file-service';
 import * as echarts from 'echarts';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,12 +17,19 @@ export class Graph implements AfterViewInit {
   public uuid: string;
   public additionalContext: string = '';
 
-  constructor(private graphService: GraphService) {
+  constructor(private graphService: GraphService, private fileService: FileService) {
     this.uuid = uuidv4();
+      
+    this.fileService.onFileLoaded.subscribe(() =>{
+      this.createChart();  
+    })
   }
 
   ngAfterViewInit(): void {
-    // Create the echarts instance
+    this.createChart();
+  }
+
+  createChart(){
     var myChart = echarts.init(document.getElementById(this.uuid));
     this.additionalContext = this.graphService.createGraph(this.graphType, myChart);
     window.addEventListener('resize', function () {

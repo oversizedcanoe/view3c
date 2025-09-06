@@ -102,6 +102,8 @@ export class FileService {
         this.logs.push(log);
       }
     }
+
+    this.logs = this.logs.filter(l=>l.dateTime != null).sort((l1, l2) => l1.dateTime!.getTime() - l2.dateTime!.getTime());;
   }
 
 }
