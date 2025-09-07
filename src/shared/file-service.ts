@@ -45,6 +45,7 @@ export class FileService {
         return;
       }
       this.fileNames.push(file.name);
+      this.fileNames.sort();
       const lines = fileContents.split('\n');
       this.lines.push(...lines);
       const logs: w3cLog[] = this.processLines(lines);

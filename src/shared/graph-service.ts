@@ -4,7 +4,7 @@ import { GraphType } from './enums';
 import * as echarts from 'echarts';
 import { w3cLog } from './models';
 import percentile from 'percentile';
- 
+
 
 @Injectable({
   providedIn: 'root'
@@ -22,20 +22,25 @@ export class GraphService {
     switch (graphType) {
       case GraphType.TimeTaken:
         const cutOff = percentile(98, logs.map(l => l.timeTaken)) as number;
+
         additionalContext = `Values in red indicate they are larger than the 98th percentile (${cutOff}ms).`
-        chart.clear();
+
         chart.setOption({
           title: {
-            text: 'Time Taken'
+            text: 'Time Taken per Request (ms)'
           },
           tooltip: {},
           xAxis: {
             data: logs.map(l => this.formatDateForChart(l.dateTime)),
             name: 'Request DateTime',
+            nameLocation: 'middle',
           },
           yAxis: {
             name: 'Time Taken (ms)',
-            max: cutOff,
+            nameLocation: 'middle',
+          },
+          grid: {
+            bottom: 100
           },
           series: [
             {
@@ -46,13 +51,29 @@ export class GraphService {
                 return {
                   tooltip: `${l.timeTaken}ms<br/>${this.formatDateForChart(l.dateTime)}<br/>${l.clientMethod} ${l.clientUriStem}`,
                   value: l.timeTaken,
-                  itemStyle:{
+                  itemStyle: {
                     color: l.timeTaken != undefined && l.timeTaken <= cutOff ? 'blue' : 'red'
                   }
                 }
-                })
+              })
             }
-          ]
+          ],
+          dataZoom: [
+            {
+              type: 'slider',
+              yAxisIndex: 0,
+              filterMode: 'none',
+              startValue: 0,
+              endValue: cutOff,
+              width: 20
+            },
+            {
+              type: 'slider',
+              xAxisIndex: 0,
+              filterMode: 'none',
+              height: 20,
+            }
+          ],
         })
     }
     return additionalContext;
