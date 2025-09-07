@@ -33,9 +33,11 @@ export class FileService {
 
     if (uploadType == UploadType.Add) {
       this.fileNames = [file.name];
+      this.logs = [];
       const lines = fileContents.split('\n');
-      this.processLines(lines);
       this.lines = lines;
+      const logs: w3cLog[] = this.processLines(lines);
+      this.logs = logs;
     }
     else if (uploadType == UploadType.Append) {
       if (this.fileNames.indexOf(file.name) > -1) {
@@ -44,9 +46,12 @@ export class FileService {
       }
       this.fileNames.push(file.name);
       const lines = fileContents.split('\n');
-      this.processLines(lines);
       this.lines.push(...lines);
+      const logs: w3cLog[] = this.processLines(lines);
+      this.logs.push(...logs)
     }
+
+    this.sortLogs();
 
     localStorage.setItem('fileNames', this.fileNames.join(','));
     localStorage.setItem('fileContents', this.lines.join('\n'));
@@ -61,13 +66,15 @@ export class FileService {
     if (fileContents != null && fileNames != null) {
       this.fileNames = fileNames.split(',');
       this.lines = fileContents.split('\n');
-      this.processLines(this.lines);
+      this.logs = this.processLines(this.lines);
+      this.sortLogs();
       this.onFileLoaded.next();
     }
   }
 
-  private processLines(lines: string[]) {
+  private processLines(lines: string[]): w3cLog[] {
     let fieldList: string[] = [];
+    let logs: w3cLog[] = [];
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
@@ -81,6 +88,10 @@ export class FileService {
       }
       else if (line[0] != "#") {
         const logFields: string[] = line.split(' ');
+
+        if (line.trim() == '') {
+          continue;
+        }
 
         const log: w3cLog = {
           dateTime: new Date(logFields[fieldList.indexOf(w3cLogFields._date)] + 'T' + logFields[fieldList.indexOf(w3cLogFields._time)] + 'Z'),
@@ -99,11 +110,19 @@ export class FileService {
           timeTaken: parseInt(logFields[fieldList.indexOf(w3cLogFields.timeTaken)]),
         }
 
-        this.logs.push(log);
+        if (log.dateTime?.getTime() == null || isNaN(log.dateTime?.getTime())) {
+          console.warn(`In valid line was found at index {${i}}`, line);
+        }
+
+        logs.push(log);
       }
     }
 
-    this.logs = this.logs.filter(l=>l.dateTime != null).sort((l1, l2) => l1.dateTime!.getTime() - l2.dateTime!.getTime());;
+    return logs;
+  }
+
+  sortLogs() {
+    this.logs = this.logs.filter(l => l.dateTime != null).sort((l1, l2) => l1.dateTime!.getTime() - l2.dateTime!.getTime());;
   }
 
 }

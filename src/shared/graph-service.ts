@@ -21,8 +21,8 @@ export class GraphService {
 
     switch (graphType) {
       case GraphType.TimeTaken:
-        const cutOff = percentile(98.9, logs.map(l => l.timeTaken)) as number;
-        additionalContext = `Values in red indicate they are larger than the 98.9th percentile (${cutOff}ms).`
+        const cutOff = percentile(98, logs.map(l => l.timeTaken)) as number;
+        additionalContext = `Values in red indicate they are larger than the 98th percentile (${cutOff}ms).`
         chart.clear();
         chart.setOption({
           title: {
@@ -31,7 +31,7 @@ export class GraphService {
           tooltip: {},
           xAxis: {
             data: logs.map(l => this.formatDateForChart(l.dateTime)),
-            name: 'Request DateTime'
+            name: 'Request DateTime',
           },
           yAxis: {
             name: 'Time Taken (ms)',
