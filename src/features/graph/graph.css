@@ -1,5 +1,9 @@
 .graph-wrapper {
     border: 3px solid black;
-    background-color: ;
     padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.graph{
+    height: 400px;
 }

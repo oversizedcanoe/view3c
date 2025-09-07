@@ -10,5 +10,4 @@ import { GraphType } from '../../shared/enums';
 })
 export class GraphContainer {
   public graphType = GraphType;
-
 }

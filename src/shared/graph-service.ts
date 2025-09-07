@@ -38,6 +38,7 @@ export class GraphService {
           yAxis: {
             name: 'Time Taken (ms)',
             nameLocation: 'middle',
+            max: cutOff
           },
           grid: {
             bottom: 100
@@ -49,7 +50,9 @@ export class GraphService {
               data: logs.map(l => {
 
                 return {
-                  tooltip: `${l.timeTaken}ms<br/>${this.formatDateForChart(l.dateTime)}<br/>${l.clientMethod} ${l.clientUriStem}`,
+                  tooltip: `${l.timeTaken! > 1000 ? `${l.timeTaken!/1000}s` : `${l.timeTaken}ms`}
+                  <br/>${this.formatDateForChart(l.dateTime)}
+                  <br/>${l.clientMethod} ${l.clientUriStem}`,
                   value: l.timeTaken,
                   itemStyle: {
                     color: l.timeTaken != undefined && l.timeTaken <= cutOff ? 'blue' : 'red'
@@ -75,6 +78,62 @@ export class GraphService {
             }
           ],
         })
+        break;
+      case GraphType.RequestsPerMinute:
+        //const cutOff = percentile(98, logs.map(l => l.timeTaken)) as number;
+        //additionalContext = `Values in red indicate they are larger than the 98th percentile (${cutOff}ms).`
+        const countsByDateTime: { [key: string]: number } = {};
+
+        for (let i = 0; i < logs.length; i++) {
+          const log = logs[i];
+          const key = log.dateTime!.toString();
+          countsByDateTime[key] = (countsByDateTime[key] || 0) + 1;
+        }
+       
+        chart.setOption({
+          title: {
+            text: 'Requests per Minute'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          xAxis: {
+            data: Object.keys(countsByDateTime).map(d=>this.formatDateForChart(new Date(d))),
+            name: 'Request DateTime',
+            nameLocation: 'middle',
+          },
+          yAxis: {
+            name: 'Number of Requests',
+            nameLocation: 'middle',
+          },
+          grid: {
+            bottom: 100
+          },
+          series: [
+            {
+              name: 'Request Quantity',
+              type: 'line',
+              data: Object.values(countsByDateTime).map(count => {
+                return {
+                  tooltip: count,//`${l.timeTaken}ms<br/>${this.formatDateForChart(l.dateTime)}<br/>${l.clientMethod} ${l.clientUriStem}`,
+                  value: count,
+                }
+              })
+            }
+          ],
+          dataZoom: [
+            {
+              type: 'slider',
+              xAxisIndex: 0,
+              filterMode: 'none',
+              height: 20,
+            }
+          ],
+        })
+        break;
+      default:
+        break;
+
     }
     return additionalContext;
   }
