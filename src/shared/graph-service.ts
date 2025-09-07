@@ -50,7 +50,7 @@ export class GraphService {
               data: logs.map(l => {
 
                 return {
-                  tooltip: `${l.timeTaken! > 1000 ? `${l.timeTaken!/1000}s` : `${l.timeTaken}ms`}
+                  tooltip: `${l.timeTaken! > 1000 ? `${l.timeTaken! / 1000}s` : `${l.timeTaken}ms`}
                   <br/>${this.formatDateForChart(l.dateTime)}
                   <br/>${l.clientMethod} ${l.clientUriStem}`,
                   value: l.timeTaken,
@@ -80,8 +80,6 @@ export class GraphService {
         })
         break;
       case GraphType.RequestsPerMinute:
-        //const cutOff = percentile(98, logs.map(l => l.timeTaken)) as number;
-        //additionalContext = `Values in red indicate they are larger than the 98th percentile (${cutOff}ms).`
         const countsByDateTime: { [key: string]: number } = {};
 
         for (let i = 0; i < logs.length; i++) {
@@ -89,7 +87,7 @@ export class GraphService {
           const key = log.dateTime!.toString();
           countsByDateTime[key] = (countsByDateTime[key] || 0) + 1;
         }
-       
+
         chart.setOption({
           title: {
             text: 'Requests per Minute'
@@ -98,7 +96,7 @@ export class GraphService {
             trigger: 'axis'
           },
           xAxis: {
-            data: Object.keys(countsByDateTime).map(d=>this.formatDateForChart(new Date(d))),
+            data: Object.keys(countsByDateTime).map(d => this.formatDateForChart(new Date(d))),
             name: 'Request DateTime',
             nameLocation: 'middle',
           },
@@ -115,7 +113,68 @@ export class GraphService {
               type: 'line',
               data: Object.values(countsByDateTime).map(count => {
                 return {
-                  tooltip: count,//`${l.timeTaken}ms<br/>${this.formatDateForChart(l.dateTime)}<br/>${l.clientMethod} ${l.clientUriStem}`,
+                  value: count,
+                }
+              })
+            }
+          ],
+          dataZoom: [
+            {
+              type: 'slider',
+              xAxisIndex: 0,
+              filterMode: 'none',
+              height: 20,
+            }
+          ],
+        })
+        break;
+      case GraphType.EndpointFrequency:
+
+        let countsByEndpoint: { [key: string]: number } = {};
+
+        for (let i = 0; i < logs.length; i++) {
+          const log = logs[i];
+          const key = log.clientUriStem!;
+          countsByEndpoint[key] = (countsByEndpoint[key] || 0) + 1;
+        }
+
+        countsByEndpoint = Object.keys(countsByEndpoint)
+          .sort((a, b) => a.localeCompare(b))
+          .reduce((acc, key) => {
+            acc[key] = countsByEndpoint[key];
+            return acc;
+          }, {} as { [key: string]: number });
+
+        chart.setOption({
+          title: {
+            text: 'Requests per Endpoint'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          xAxis: {
+            data: Object.keys(countsByEndpoint),
+            name: 'Query',
+            nameLocation: 'middle',
+            axisLabel: {
+              rotate: 90,      // rotate labels 45 degrees
+              interval: 0,     // 0 = show all labels
+              formatter: (val: string) => val // optional, for formatting
+            }
+          },
+          yAxis: {
+            name: 'Number of Requests',
+            nameLocation: 'middle',
+          },
+          grid: {
+            bottom: 100
+          },
+          series: [
+            {
+              name: 'Request Quantity',
+              type: 'line',
+              data: Object.values(countsByEndpoint).map(count => {
+                return {
                   value: count,
                 }
               })
