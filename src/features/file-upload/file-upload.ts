@@ -43,10 +43,12 @@ export class FileUpload implements AfterViewInit {
      const item = $event.dataTransfer.items[i];
      if (item.kind == 'file') {
         const file = item.getAsFile();
-        console.log('test')
         if (file) {
-          console.log(this);
-          this.fileService.processFile(file, this.uploadType);
+          // If multiple files are dropped and the UploadType is "Add", pass it 
+          // with that parameter. Otherwise, even if this is an "Add" type, pass "Append",
+          // to allow multiple files to be processed
+          const uploadType = i == 0 ? this.uploadType : UploadType.Append;
+          this.fileService.processFile(file, uploadType);
         }
      } 
     }
@@ -55,9 +57,14 @@ export class FileUpload implements AfterViewInit {
   onFileUploaded($event: Event) {
     const inputElement = $event.target as HTMLInputElement;
     if (inputElement.files && inputElement.files.length > 0) {
-      const selectedFile = inputElement.files[0]; // Get the first selected file
-      // You can now work with the selectedFile (e.g., upload it, display its name, etc.)
-      this.fileService.processFile(selectedFile, this.uploadType);
+      for (let i = 0; i < inputElement.files.length; i++) {
+        const file = inputElement.files[i];
+        // If multiple files are dropped and the UploadType is "Add", pass it 
+        // with that parameter. Otherwise, even if this is an "Add" type, pass "Append",
+        // to allow multiple files to be processed
+        const uploadType = i == 0 ? this.uploadType : UploadType.Append;
+        this.fileService.processFile(file, uploadType);
+      }
     }
   }
 

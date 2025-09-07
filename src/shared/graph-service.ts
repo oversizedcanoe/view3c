@@ -128,7 +128,7 @@ export class GraphService {
           ],
         })
         break;
-      case GraphType.EndpointFrequency:
+      case GraphType.RequestsPerEndpoint:
 
         let countsByEndpoint: { [key: string]: number } = {};
 
