@@ -10,7 +10,7 @@
         <mxCell id="D5IQ92e4jXsZk3H6eTiw-2" value="" style="rounded=0;whiteSpace=wrap;html=1;movable=0;resizable=0;rotatable=0;deletable=0;editable=0;locked=1;connectable=0;" vertex="1" parent="1">
           <mxGeometry x="120" y="500" width="610" height="390" as="geometry" />
         </mxCell>
-        <mxCell id="D5IQ92e4jXsZk3H6eTiw-3" value="w3clarity" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+        <mxCell id="D5IQ92e4jXsZk3H6eTiw-3" value="view3c" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
           <mxGeometry x="375" y="60" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="D5IQ92e4jXsZk3H6eTiw-4" value="&lt;div&gt;Upload your ......&lt;br&gt;&lt;br&gt;Benefits blah blahhh..&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;align=center;" vertex="1" parent="1">
@@ -28,7 +28,7 @@
         <mxCell id="D5IQ92e4jXsZk3H6eTiw-10" value="" style="rounded=0;whiteSpace=wrap;html=1;movable=0;resizable=0;rotatable=0;deletable=0;editable=0;locked=1;connectable=0;" vertex="1" parent="1">
           <mxGeometry x="120" y="500" width="120" height="390" as="geometry" />
         </mxCell>
-        <mxCell id="D5IQ92e4jXsZk3H6eTiw-9" value="w3clarity" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+        <mxCell id="D5IQ92e4jXsZk3H6eTiw-9" value="view3c" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
           <mxGeometry x="130" y="510" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="D5IQ92e4jXsZk3H6eTiw-11" value="MyFile.log" style="text;strokeColor=none;fillColor=none;html=1;fontSize=10;fontStyle=2;verticalAlign=middle;align=center;" vertex="1" parent="1">

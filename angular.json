@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "w3clarity": {
+    "view3c": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "w3clarity:build:production"
+              "buildTarget": "view3c:build:production"
             },
             "development": {
-              "buildTarget": "w3clarity:build:development"
+              "buildTarget": "view3c:build:development"
             }
           },
           "defaultConfiguration": "development"

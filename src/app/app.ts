@@ -12,7 +12,7 @@ import { GraphContainer } from '../features/graph-container/graph-container';
   styleUrl: './app.css'
 })
 export class App implements OnInit, OnDestroy {
-  protected readonly title = signal('w3clarity');
+  protected readonly title = signal('view3c');
   fileUploaded: boolean = false;
 
   constructor(private fileService: FileService) {
