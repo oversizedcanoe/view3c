@@ -9,7 +9,6 @@ A browser-based W3C log file visualizer built with [Apache Echarts](https://echa
 
 # Use
  - ...
- - ...
 
 # To Do
  - More charts
