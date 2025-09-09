@@ -72,7 +72,8 @@ export class FileUpload implements AfterViewInit {
 
   onSubmitClicked(){
     const element = document.getElementById('textarea'+this.uploadType) as HTMLTextAreaElement;
-    this.fileService.processText(element.value, this.uploadType, 'Text Upload')
+    const fileText = element.value;
+    element.value = "";
+    this.fileService.processText(fileText, this.uploadType, 'Text Upload')
   }
-
 }
