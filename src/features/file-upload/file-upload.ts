@@ -74,6 +74,10 @@ export class FileUpload implements AfterViewInit {
     const element = document.getElementById('textarea'+this.uploadType) as HTMLTextAreaElement;
     const fileText = element.value;
     element.value = "";
-    this.fileService.processText(fileText, this.uploadType, 'Text Upload')
+
+    const textUploadFileName = "Text Upload";
+    const textUploadCount = this.fileService.fileNames.filter(f=>f.startsWith(textUploadFileName)).length;
+
+    this.fileService.processText(fileText, this.uploadType, `${textUploadFileName} ${textUploadCount+1}`)
   }
 }

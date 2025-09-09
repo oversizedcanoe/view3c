@@ -48,6 +48,7 @@ export class FileService {
         alert('This file has already been processed. Skipping.');
         return;
       }
+
       this.fileNames.push(fileName);
       this.fileNames.sort();
       const lines = fileText.split('\n');
