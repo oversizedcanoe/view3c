@@ -25,7 +25,7 @@ export class App implements OnInit, OnDestroy {
     });
     
     // To disable loading of files on app init, comment this out
-    this.fileService.checkIfLinesInStorage();
+    this.fileService.tryProcessLinesFromStorage();
   }
 
   ngOnDestroy(): void {

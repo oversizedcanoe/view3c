@@ -4,10 +4,10 @@
     </div>
     
     <div class="file-upload-wrapper">
-        <app-file-upload [uploadType]="UploadType.Add" [labelText]="'Replace File'"/>
-        <app-file-upload [uploadType]="UploadType.Append" [labelText]="'Append File'"/>
+        <app-file-upload [uploadType]="UploadType.AddFile" [labelText]="'Replace File'"/>
+        <app-file-upload [uploadType]="UploadType.AppendFile" [labelText]="'Append File'"/>
     </div>
-    
+
     <div class="metadata-wrapper">
             <p>Lines Processed: <b>{{linesUploaded}}</b></p>
             <p>Files Processed:</p>
@@ -16,5 +16,10 @@
                     <li><b>{{fileName}}</b></li>
                 }
             </ul>
+    </div>
+
+    
+    <div class="button-wrapper">
+        <button (click)="clearStorage()">Clear Logs</button>
     </div>
 </div>

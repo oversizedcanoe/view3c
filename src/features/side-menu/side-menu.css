@@ -5,7 +5,7 @@
 .side-menu {
     height: 100%;
     background-color: rgb(179, 220, 255);
-    padding:0.5rem;
+    padding: 0.5rem;
 }
 
 .header-wrapper {
@@ -20,4 +20,19 @@
 .metadata-wrapper {
     /* font-size: small; */
     margin-top: 10%;
+}
+
+.button-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    /* shift back by half the button width to truly center it */
+    transform: translateX(-50%); 
+}
+
+button {
+    margin-bottom: 0.5rem;
+    border-radius: 3px;
+    background-color:rgb(255, 100, 100);
+    padding: 0.3rem;
 }

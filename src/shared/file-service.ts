@@ -17,36 +17,40 @@ export class FileService {
   constructor() {
   }
 
-  getFileCount(): number {
+  public getFileCount(): number {
     return this.fileNames.length;
   }
 
-  getLineCount(): number {
+  public getLineCount(): number {
     return this.logs.length;
   }
 
-  getFileNames(): string[] {
+  public getFileNames(): string[] {
     return this.fileNames;
   }
-  async processFile(file: File, uploadType: UploadType): Promise<void> {
-    const fileContents = await file.text();
+  
+  public async processFile(file: File, uploadType: UploadType){
+    const fileText = await file.text();
+    this.processText(fileText, uploadType, file.name);
+  }
 
-    if (uploadType == UploadType.Add) {
-      this.fileNames = [file.name];
+  public processText(fileText: string, uploadType: UploadType, fileName: string): void {
+    if (uploadType == UploadType.AddFile || uploadType == UploadType.AddText) {
+      this.fileNames = [fileName];
       this.logs = [];
-      const lines = fileContents.split('\n');
+      const lines = fileText.split('\n');
       this.lines = lines;
       const logs: w3cLog[] = this.processLines(lines);
       this.logs = logs;
     }
-    else if (uploadType == UploadType.Append) {
-      if (this.fileNames.indexOf(file.name) > -1) {
+    else if (uploadType == UploadType.AppendFile || uploadType == UploadType.AppendText) {
+      if (uploadType == UploadType.AppendFile && this.fileNames.indexOf(fileName) > -1) {
         alert('This file has already been processed. Skipping.');
         return;
       }
-      this.fileNames.push(file.name);
+      this.fileNames.push(fileName);
       this.fileNames.sort();
-      const lines = fileContents.split('\n');
+      const lines = fileText.split('\n');
       this.lines.push(...lines);
       const logs: w3cLog[] = this.processLines(lines);
       this.logs.push(...logs)
@@ -60,7 +64,7 @@ export class FileService {
     this.onFileLoaded.next();
   }
 
-  checkIfLinesInStorage() {
+  public tryProcessLinesFromStorage() {
     const fileContents = localStorage.getItem('fileContents');
     const fileNames = localStorage.getItem('fileNames');
 
@@ -122,7 +126,7 @@ export class FileService {
     return logs;
   }
 
-  sortLogs() {
+  private sortLogs() {
     this.logs = this.logs.filter(l => l.dateTime != null).sort((l1, l2) => l1.dateTime!.getTime() - l2.dateTime!.getTime());;
   }
 

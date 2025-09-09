@@ -1,6 +1,8 @@
 export enum UploadType {
-    Add = 1,
-    Append = 2
+    AddFile = 1,
+    AppendFile = 2,
+    AddText = 3,
+    AppendText = 4
 }
 
 export enum w3cLogFields {

@@ -30,4 +30,9 @@ export class SideMenu implements OnInit {
     this.linesUploaded = this.fileService.getLineCount();
     this.fileNamesUploaded = this.fileService.getFileNames();
   }
+
+  clearStorage(){
+    window.localStorage.clear();
+    window.location.reload();
+  }
 }

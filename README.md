@@ -14,3 +14,5 @@ A browser-based W3C log file visualizer built with [Apache Echarts](https://echa
  - More charts
  - Add way to upload file via copy/pasting the contents
  - Add demo files
+ - Add button to clear storage
+ - Fill out "Use" section above

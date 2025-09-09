@@ -4,11 +4,13 @@
 
 <div class="dashboard-wrapper">
 
-    <p>Upload your <a href='https://www.w3.org/TR/WD-logfile'>W3C</a> log file by clicking the button below or by dragging a file into it.</p>
+    <p>Upload your <a href='https://www.w3.org/TR/WD-logfile'>W3C</a> log file below.</p>
     <p>Various graphs will be available to visualize your data.</p>
     <div class="file-upload-wrapper">
         <!--Append is used here to allow multiple to be drag and dropped-->
-        <app-file-upload [uploadType]="UploadType.Append" [labelText]="'Upload File'"/>
+        <app-file-upload [uploadType]="UploadType.AppendFile" [labelText]="'Upload/Drop File'"/>
+        <p>- or -</p>
+        <app-file-upload [uploadType]="UploadType.AddText" [labelText]="'Add text...'"/>
     </div>
     
     <h3>About</h3>

@@ -6,7 +6,7 @@ input[type="file"] {
   display: none;
 }
 
-.file-upload-label {
+label {
   border: 1px solid #ccc;
   display: inline-block;
   padding: 6px 12px;
@@ -14,9 +14,30 @@ input[type="file"] {
   border-radius: 3px;
   background-color: white;
   width: 75%;
-}
-
-.file-upload-label {
   margin-top: 1px;
   margin-bottom: 1px;
+}
+
+.file-upload-text {
+  display: flex;
+  align-items: normal;
+  justify-content: center;
+}
+
+textarea {
+  resize: none;
+  width: 60%;
+  margin: 0;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+button {
+  width: 15%;
+  margin: 0;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  background-color: blueviolet;
+  color: whitesmoke;
+  cursor: pointer;
 }

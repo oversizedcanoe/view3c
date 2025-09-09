@@ -1,4 +1,12 @@
-<div class="file-upload" id="{{'dropZone' + uploadType}}">
-    <label for="{{'fileUpload' + uploadType}}" class="file-upload-label">{{labelText}}</label>
+@if(uploadType == UploadType.AddFile || uploadType == UploadType.AppendFile){
+<div id="{{'dropZone' + uploadType}}">
+    <label for="{{'fileUpload' + uploadType}}">{{labelText}}</label>
     <input id="{{'fileUpload' + uploadType}}" type="file" (change)="onFileUploaded($event)" multiple />
 </div>
+}
+@else if (uploadType == UploadType.AddText || uploadType == UploadType.AppendText){
+<div class="file-upload-text">
+    <textarea id="{{'textarea' + uploadType}}" placeholder="{{labelText}}"></textarea>
+    <button (click)="onSubmitClicked()">Submit</button>
+</div>
+}

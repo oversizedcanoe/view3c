@@ -12,6 +12,8 @@ export class FileUpload implements AfterViewInit {
   @Input() uploadType!: UploadType;
   @Input() labelText: string = 'Upload File';
 
+  public UploadType = UploadType;
+
   constructor(public fileService: FileService) {
   }
 
@@ -47,7 +49,7 @@ export class FileUpload implements AfterViewInit {
           // If multiple files are dropped and the UploadType is "Add", pass it 
           // with that parameter. Otherwise, even if this is an "Add" type, pass "Append",
           // to allow multiple files to be processed
-          const uploadType = i == 0 ? this.uploadType : UploadType.Append;
+          const uploadType = i == 0 ? this.uploadType : UploadType.AppendFile;
           this.fileService.processFile(file, uploadType);
         }
      } 
@@ -62,10 +64,15 @@ export class FileUpload implements AfterViewInit {
         // If multiple files are dropped and the UploadType is "Add", pass it 
         // with that parameter. Otherwise, even if this is an "Add" type, pass "Append",
         // to allow multiple files to be processed
-        const uploadType = i == 0 ? this.uploadType : UploadType.Append;
+        const uploadType = i == 0 ? this.uploadType : UploadType.AppendFile;
         this.fileService.processFile(file, uploadType);
       }
     }
+  }
+
+  onSubmitClicked(){
+    const element = document.getElementById('textarea'+this.uploadType) as HTMLTextAreaElement;
+    this.fileService.processText(element.value, this.uploadType, 'Text Upload')
   }
 
 }
