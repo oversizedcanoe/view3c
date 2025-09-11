@@ -127,7 +127,6 @@ export class ChartService {
         })
         break;
       case ChartType.RequestsPerEndpoint:
-
         let countsByEndpoint: { [key: string]: number } = {};
 
         for (let i = 0; i < logs.length; i++) {
@@ -187,6 +186,74 @@ export class ChartService {
             }
           ],
         })
+        break;
+      case ChartType.StatusCodeFrequency:
+        // Index 0 = 1xx
+        // Index 1 = 2xx
+        // etc
+        const rawData = [
+          // [0] is: Number of 1xx for the first xx
+          // [1] is: Number of 1xx for the next xx
+          // [2] is: Number of 1xx for the next xx
+          [1000, 334,],
+
+
+          // [0] is: Number of 2xx for the first xx
+          // [1] is: Number of 2xx for the next xx
+          // [2] is: Number of 2xx for the next xx
+          [101, 134,],
+
+
+          [191, 234,],
+          [201, 154,],
+          [901, 934,]
+        ];
+
+        const rawData2: number[] = [];
+
+
+
+        const totalData: number[] = [];
+        for (let i = 0; i < rawData[0].length; ++i) {
+          let sum = 0;
+          for (let j = 0; j < rawData.length; ++j) {
+            sum += rawData[j][i];
+          }
+          totalData.push(sum);
+        }
+
+        const series: any[] = []
+        for (let i = 0; i < rawData.length; i++) {
+          series.push({
+            type: 'bar',
+            stack: 'total',
+            barWidth: '60%',
+            label: {
+              show: true,
+              formatter: (params: any) => Math.round(params.value * 1000) / 10 + '%'
+            },
+            data: rawData[i].map((d, did) =>
+              totalData[did] <= 0 ? 0 : d / totalData[did]
+            )
+          });
+        }
+
+        chart.setOption({
+          title: {
+            text: 'Requests by Status Code'
+          },
+          legend: {
+            selectedMode: false
+          },
+          yAxis: {
+            type: 'value'
+          },
+          xAxis: {
+            type: 'category',
+            data: ['1xx', '2xx', '3xx', '4xx', '5xx']
+          },
+          series
+        });
         break;
       default:
         break;
