@@ -23,7 +23,7 @@ export enum w3cLogFields {
   timeTaken = 'time-taken',
 }
 
-export enum GraphType {
+export enum ChartType {
   TimeTaken = 1,
   RequestsPerMinute = 2,
   RequestsPerEndpoint = 3,

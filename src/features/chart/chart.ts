@@ -2,23 +2,23 @@ import { AfterViewInit, Component, Input } from '@angular/core';
 import { FileService } from '../../shared/file-service';
 import * as echarts from 'echarts';
 import { v4 as uuidv4 } from 'uuid';
-import { GraphType } from '../../shared/enums';
-import { GraphService } from '../../shared/graph-service';
+import { ChartType } from '../../shared/enums';
+import { ChartService } from '../../shared/chart-service';
 
 
 @Component({
-  selector: 'app-graph',
+  selector: 'app-chart',
   imports: [],
-  templateUrl: './graph.html',
-  styleUrl: './graph.css'
+  templateUrl: './chart.html',
+  styleUrl: './chart.css'
 })
-export class Graph implements AfterViewInit {
-  @Input() graphType!: GraphType;
+export class Chart implements AfterViewInit {
+  @Input() chartType!: ChartType;
   public uuid: string;
   public additionalContext: string = '';
   public chart!: echarts.ECharts;
 
-  constructor(private graphService: GraphService, private fileService: FileService) {
+  constructor(private chartService: ChartService, private fileService: FileService) {
     this.uuid = uuidv4();
       
     this.fileService.onFileLoaded.subscribe(() =>{
@@ -32,7 +32,7 @@ export class Graph implements AfterViewInit {
 
   createChart(){
     this.chart = echarts.init(document.getElementById(this.uuid));
-    this.additionalContext = this.graphService.createGraph(this.graphType, this.chart);
+    this.additionalContext = this.chartService.createGraph(this.chartType, this.chart);
     window.addEventListener('resize',  () => {
       this.chart.resize();
     });

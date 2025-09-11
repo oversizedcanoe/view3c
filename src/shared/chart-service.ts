@@ -1,26 +1,24 @@
 import { Injectable } from '@angular/core';
 import { FileService } from './file-service';
-import { GraphType } from './enums';
 import * as echarts from 'echarts';
 import { w3cLog } from './models';
 import percentile from 'percentile';
-
+import { ChartType } from './enums';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GraphService {
-
+export class ChartService {
   constructor(private fileService: FileService) {
 
   }
 
-  createGraph(graphType: GraphType, chart: echarts.ECharts): string {
+  createGraph(chartType: ChartType, chart: echarts.ECharts): string {
     let additionalContext: string = '';
     let logs: w3cLog[] = this.fileService.logs;
 
-    switch (graphType) {
-      case GraphType.TimeTaken:
+    switch (chartType) {
+      case ChartType.TimeTaken:
         const cutOff = percentile(98, logs.map(l => l.timeTaken)) as number;
 
         additionalContext = `Values in red indicate they are larger than the 98th percentile (${cutOff}ms).`
@@ -79,7 +77,7 @@ export class GraphService {
           ],
         })
         break;
-      case GraphType.RequestsPerMinute:
+      case ChartType.RequestsPerMinute:
         const countsByDateTime: { [key: string]: number } = {};
 
         for (let i = 0; i < logs.length; i++) {
@@ -128,7 +126,7 @@ export class GraphService {
           ],
         })
         break;
-      case GraphType.RequestsPerEndpoint:
+      case ChartType.RequestsPerEndpoint:
 
         let countsByEndpoint: { [key: string]: number } = {};
 
