@@ -188,55 +188,91 @@ export class ChartService {
         })
         break;
       case ChartType.StatusCodeFrequency:
-        // Index 0 = 1xx
-        // Index 1 = 2xx
-        // etc
-        const rawData = [
-          // [0] is: Number of 1xx for the first xx
-          // [1] is: Number of 1xx for the next xx
-          // [2] is: Number of 1xx for the next xx
-          [1000, 334,],
+        const countsByHttpCode: { [key: string]: number } = {};
 
+        for (let i = 0; i < logs.length; i++) {
+          const log: w3cLog = logs[i];
+          if (log.serverStatus == null) {
+            continue;
+          }
 
-          // [0] is: Number of 2xx for the first xx
-          // [1] is: Number of 2xx for the next xx
-          // [2] is: Number of 2xx for the next xx
-          [101, 134,],
+          const key = log.serverStatus;
+          countsByHttpCode[key] = (countsByHttpCode[key] || 0) + 1;
+        }
 
+        console.warn(countsByHttpCode);
 
-          [191, 234,],
-          [201, 154,],
-          [901, 934,]
-        ];
+        // Two dimensional array.
+        // Index in outer array represents the HTTP Status Category - index 0 = 1xx,
+        // index 1 = 2xx, index 2 = 3xx etc
+        // The inner array is a list of counts per specific HTTP Status: i.e., [4, 10, 1]
+        // means 4x one code, 10x one code, 1x one code
+        // The specific code matches the index in countsByHttpCode for that category
+        // holy shit this is complicated  
+        const rawData2: number[][] = [];
 
-        const rawData2: number[] = [];
+        // 1xx through 5xx
+        for (let i = 0; i < 5; i++) {
+          rawData2.push([]);
+        }
 
+        let longestRowLength = 0;
+
+        Object.keys(countsByHttpCode).forEach((httpCodeProperty) => {
+          const httpCode: number = parseInt(httpCodeProperty);
+          const count = countsByHttpCode[httpCode];
+          const httpStatusCodeCategory: number = parseInt(httpCode.toString()[0]);
+          const correctRowInArray = rawData2[httpStatusCodeCategory-1];
+          correctRowInArray.push(count);
+
+          if(correctRowInArray.length > longestRowLength){
+            longestRowLength = correctRowInArray.length;
+          }
+        });
+
+        console.warn(rawData2);
 
 
         const totalData: number[] = [];
-        for (let i = 0; i < rawData[0].length; ++i) {
+        for (let i = 0; i < rawData2[0].length; ++i) {
           let sum = 0;
-          for (let j = 0; j < rawData.length; ++j) {
-            sum += rawData[j][i];
+          for (let j = 0; j < rawData2.length; ++j) {
+            sum += rawData2[j][i];
           }
           totalData.push(sum);
         }
 
-        const series: any[] = []
-        for (let i = 0; i < rawData.length; i++) {
+        const series: any[] = [];
+
+
+        for(let i = 0; i < longestRowLength; i++){
+          let row = [];
+
           series.push({
             type: 'bar',
             stack: 'total',
             barWidth: '60%',
             label: {
               show: true,
-              formatter: (params: any) => Math.round(params.value * 1000) / 10 + '%'
+              formatter: (params: any) => params.value
             },
-            data: rawData[i].map((d, did) =>
-              totalData[did] <= 0 ? 0 : d / totalData[did]
-            )
+            data: 
+            rawData2[i].map((d, did) =>d)
           });
         }
+
+        // for (let i = 0; i < rawData2.length; i++) {
+        //   series.push({
+        //     type: 'bar',
+        //     stack: 'total',
+        //     barWidth: '60%',
+        //     label: {
+        //       show: true,
+        //       formatter: (params: any) => params.value
+        //     },
+        //     data: rawData2[i].map((d, did) =>d)
+        //   });
+        // }
 
         chart.setOption({
           title: {
@@ -277,4 +313,11 @@ export class ChartService {
       hour12: false,
     });
   }
+
+  // getHttpStatusCategory(statusCode: number | undefined): number {
+  //   if (statusCode) {
+  //     return parseInt(statusCode.toString()[0]);
+  //   }
+  //   return 0;
+  // }
 }
