@@ -21,7 +21,7 @@ export class FileService {
     return this.fileNames.length;
   }
 
-  public getLineCount(): number {
+  public getLogCount(): number {
     return this.logs.length;
   }
 

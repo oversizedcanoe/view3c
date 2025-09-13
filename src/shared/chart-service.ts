@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FileService } from './file-service';
 import * as echarts from 'echarts';
-import { w3cLog } from './models';
+import { HTTP_STATUS_CODE_DICT, w3cLog } from './models';
 import percentile from 'percentile';
 import { ChartType } from './enums';
 
@@ -189,7 +189,10 @@ export class ChartService {
         break;
       case ChartType.StatusCodeFrequency:
         const countsByHttpCode: { [key: string]: number } = {};
+        const countsByHttpCodeCategory: { [key: string]: number } = {};
 
+        let totalRequests: number = 0;
+        
         for (let i = 0; i < logs.length; i++) {
           const log: w3cLog = logs[i];
           if (log.serverStatus == null) {
@@ -198,97 +201,86 @@ export class ChartService {
 
           const key = log.serverStatus;
           countsByHttpCode[key] = (countsByHttpCode[key] || 0) + 1;
+
+          const category = key.toString()[0];
+          countsByHttpCodeCategory[category] = (countsByHttpCodeCategory[category] || 0) + 1;
+
+          totalRequests++;
         }
 
-        console.warn(countsByHttpCode);
+        const percentagesByHttpCodeCategory:{ [key: string]: string  } = {};
+        const formattedCountsByCategory: {[key: string]: string } = {};
 
-        // Two dimensional array.
-        // Index in outer array represents the HTTP Status Category - index 0 = 1xx,
-        // index 1 = 2xx, index 2 = 3xx etc
-        // The inner array is a list of counts per specific HTTP Status: i.e., [4, 10, 1]
-        // means 4x one code, 10x one code, 1x one code
-        // The specific code matches the index in countsByHttpCode for that category
-        // holy shit this is complicated  
-        const rawData2: number[][] = [];
+        Object.keys(countsByHttpCodeCategory).forEach((category) => {
+          percentagesByHttpCodeCategory[category] = ((countsByHttpCodeCategory[category] / totalRequests) * 100).toFixed(2);
+    
+          let counts: string[] = [];
+          let totalForCategory: number = 0;
 
-        // 1xx through 5xx
-        for (let i = 0; i < 5; i++) {
-          rawData2.push([]);
-        }
+          Object.keys(countsByHttpCode).filter(c=>c.startsWith(category)).forEach((httpCode) => {
+            const count = countsByHttpCode[httpCode];
+            counts.push(`${httpCode} ${HTTP_STATUS_CODE_DICT[httpCode]}: ${count}`);
+            totalForCategory += count;
+          });
 
-        let longestRowLength = 0;
-
-        Object.keys(countsByHttpCode).forEach((httpCodeProperty) => {
-          const httpCode: number = parseInt(httpCodeProperty);
-          const count = countsByHttpCode[httpCode];
-          const httpStatusCodeCategory: number = parseInt(httpCode.toString()[0]);
-          const correctRowInArray = rawData2[httpStatusCodeCategory-1];
-          correctRowInArray.push(count);
-
-          if(correctRowInArray.length > longestRowLength){
-            longestRowLength = correctRowInArray.length;
-          }
+          formattedCountsByCategory[category] = counts.join('<br>') + `<br><br><i>Total: ${totalForCategory} (${percentagesByHttpCodeCategory[category]}%)</i>`;
         });
 
-        console.warn(rawData2);
-
-
-        const totalData: number[] = [];
-        for (let i = 0; i < rawData2[0].length; ++i) {
-          let sum = 0;
-          for (let j = 0; j < rawData2.length; ++j) {
-            sum += rawData2[j][i];
-          }
-          totalData.push(sum);
+        const colorByCategory:  {[key: string]: string } = {
+          '1': 'rgba(78, 72, 255, 0.54)', // blue: info
+          '2': 'rgba(72, 255, 96, 0.54)', // green: success
+          '3': 'rgba(252, 255, 72, 0.54)', // yellow: redirect, i.e. caution
+          '4': 'rgba(255, 145, 72, 0.54)', // orange: bad, user fault
+          '5': 'rgba(255, 72, 72, 0.54)', // red: bad, your fault
         }
 
-        const series: any[] = [];
-
-
-        for(let i = 0; i < longestRowLength; i++){
-          let row = [];
-
-          series.push({
-            type: 'bar',
-            stack: 'total',
-            barWidth: '60%',
-            label: {
-              show: true,
-              formatter: (params: any) => params.value
-            },
-            data: 
-            rawData2[i].map((d, did) =>d)
-          });
+        const descriptionByCategory: {[key: string]: string } = {
+          '1': 'Information', // blue: info
+          '2': 'Success', // green: success
+          '3': 'Redirect', // yellow: redirect, i.e. caution
+          '4': 'Client Error', // orange: bad, user fault
+          '5': 'Server Error', // red: bad, your fault
         }
-
-        // for (let i = 0; i < rawData2.length; i++) {
-        //   series.push({
-        //     type: 'bar',
-        //     stack: 'total',
-        //     barWidth: '60%',
-        //     label: {
-        //       show: true,
-        //       formatter: (params: any) => params.value
-        //     },
-        //     data: rawData2[i].map((d, did) =>d)
-        //   });
-        // }
 
         chart.setOption({
           title: {
-            text: 'Requests by Status Code'
+            text: 'Requests by Status Code',
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item'
           },
           legend: {
-            selectedMode: false
+            orient: 'vertical',
+            left: 'left'
           },
-          yAxis: {
-            type: 'value'
-          },
-          xAxis: {
-            type: 'category',
-            data: ['1xx', '2xx', '3xx', '4xx', '5xx']
-          },
-          series
+          series: [
+            {
+              name: 'HTTP Status Code Category',
+              type: 'pie',
+              radius: '50%',
+              data: Object.keys(countsByHttpCodeCategory).map((category, index) => ({
+                value: countsByHttpCodeCategory[category],
+                name: category + 'xx ' + descriptionByCategory[category],
+                tooltip: `<b>HTTP Status Code ${category}xx ${descriptionByCategory[category]}</b><br>${formattedCountsByCategory[category]}`,
+                label: {
+                  formatter: (params: any) => params.value + "xx",
+                  position: 'inside',
+                  color: 'black'
+                },
+                itemStyle: {
+                  color: colorByCategory[category],
+                }
+              })),
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
         });
         break;
       default:
