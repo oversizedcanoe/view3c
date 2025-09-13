@@ -264,7 +264,7 @@ export class ChartService {
                 name: category + 'xx ' + descriptionByCategory[category],
                 tooltip: `<b>HTTP Status Code ${category}xx ${descriptionByCategory[category]}</b><br>${formattedCountsByCategory[category]}`,
                 label: {
-                  formatter: (params: any) => params.value + "xx",
+                  formatter: category + "xx",
                   position: 'inside',
                   color: 'black'
                 },
