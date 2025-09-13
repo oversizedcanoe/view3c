@@ -12,10 +12,10 @@
     </div>
 
     <div class="metadata-wrapper">
-            <p>Lines Processed: <b>{{linesUploaded}}</b></p>
+            <p>Logs Processed: <b>{{logsProcessed}}</b></p>
             <p>Files Processed:</p>
             <ul>
-                @for(fileName of fileNamesUploaded; track fileName){
+                @for(fileName of fileNamesProcessed; track fileName){
                     <li><b>{{fileName}}</b></li>
                 }
             </ul>

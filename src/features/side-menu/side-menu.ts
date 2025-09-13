@@ -11,8 +11,8 @@ import { UploadType } from '../../shared/enums';
 })
 export class SideMenu implements OnInit {
   public filesUploaded: number = 0;
-  public linesUploaded: number = 0;
-  public fileNamesUploaded: string[] = [];
+  public logsProcessed: number = 0;
+  public fileNamesProcessed: string[] = [];
 
   public UploadType = UploadType;
 
@@ -27,8 +27,8 @@ export class SideMenu implements OnInit {
   }
 
   setFileMetaData(){
-    this.linesUploaded = this.fileService.getLineCount();
-    this.fileNamesUploaded = this.fileService.getFileNames();
+    this.logsProcessed = this.fileService.getLogCount();
+    this.fileNamesProcessed = this.fileService.getFileNames();
   }
 
   clearStorage(){
