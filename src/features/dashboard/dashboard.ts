@@ -13,7 +13,7 @@ export class Dashboard {
   public UploadType = UploadType;
 
   async onCopyClicked() {
-    const file = await fetch('/demo/Demo.log');
+    const file = await fetch('./demo/Demo.log');
     const fileText = await file.text();
 
     if (navigator.clipboard && window.isSecureContext) {
