@@ -4,20 +4,25 @@
 
 <div class="dashboard-wrapper">
 
-    <p>Upload your <a href='https://www.w3.org/TR/WD-logfile'>W3C</a> log file below.</p>
-    <p>Various graphs will be available to visualize your data.</p>
+    <p>Upload your W3C log file below.</p>
+    <p>Visualize them with simple, useful graphs directly in your browser. The files never leave your device.</p>
+    <a href="https://github.com/oversizedcanoe/view3c?tab=readme-ov-file#view3c">Learn more</a>
+    
+    
     <div class="file-upload-wrapper">
         <!--Append is used here to allow multiple to be drag and dropped-->
         <app-file-upload [uploadType]="UploadType.AppendFile" [labelText]="'Upload/Drop Files'"/>
         <p>- or -</p>
         <app-file-upload [uploadType]="UploadType.AddText" [labelText]="'Add text...'"/>
     </div>
-
-    <h3>About</h3>
     
-    <p>Visualize IIS logs in your browser. No download or sign-ups required.</p>
-    <p>Your files always stay local -- they are never uploaded to a remote server.</p>
-    <p>Demo logs available <a href="https://github.com/oversizedcanoe/view3c/blob/main/public/demo/Demo.log">here</a>. Download the file or copy the contents to use above.</p>        
+
+    <br/>
+    <br/>
+    <h3>Try it</h3>
+    <p>Demo logs available — <a href="/demo/Demo.log">view</a>, 
+        <a href="/demo/Demo.log" download="">download</a>,
+        or <span class="copy" (click)="onCopyClicked()">copy</span> the contents.</p>        
     <p>View the <a href="https://github.com/oversizedcanoe/view3c">source code</a>.</p>
 
 </div>

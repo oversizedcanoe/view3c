@@ -5,6 +5,7 @@
 :host {
     margin: 0 auto;
     min-height: 100vh;
+    max-width: 90vh;
 }
 
 header {
@@ -12,6 +13,12 @@ header {
 }
 
 .file-upload-wrapper {
-    max-width: 50%;
+    max-width: 90%;
     margin: 5vh auto 10vh auto;
+}
+
+.copy {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
 }
