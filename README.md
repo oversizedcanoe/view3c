@@ -27,6 +27,7 @@ Other advantages include:
 
 
 #### To Do
- - More charts
- - Add demo files
+ - More charts. Add tabular data representation too
+   - Request time-taken as percentiles (25% less than x ms, 50% less than y %, etc)
+   - Could switch "Requests per Endpoint" to be tabular, probably easier to read 
  - Fill out "How?" section above
